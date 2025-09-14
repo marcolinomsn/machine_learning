@@ -10,7 +10,6 @@ from local_api import (
     get_run_datetimes,
     retrieve_station_measures,
 )
-from ia import evaluate_models, pivot_forecasts, train_weights, pipeline
 
 
 if __name__ == "__main__":
@@ -57,20 +56,7 @@ if __name__ == "__main__":
 
     all_forecasts.datetime = all_forecasts.datetime.apply(add_time)
     all_forecasts.run_datetime = all_forecasts.run_datetime.apply(add_time)
+
     all_forecasts = all_forecasts[["model", "run_datetime", "datetime", "precipitation", "precipitation_obs"]]
 
-    pivot_df = pivot_forecasts(all_forecasts)
-
-    pivot_df = pivot_df.dropna()
-
-    # reg, weights = train_weights(pivot_df)
-    # metrics = evaluate_models(pivot_df, reg)
-
-    # print("Pesos encontrados pela IA:")
-    # print(weights)
-
-    # print("\nMétricas por modelo e ensemble:")
-    # print(metrics)
-    # print()
-
-    result = pipeline(df_pivot)
+    all_forecasts.to_csv("dataset.csv", index=False)
