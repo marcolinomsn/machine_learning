@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 import requests
+
 import numpy as np
 import pandas as pd
 
+from datetimee import FIVE_DAYS_IN_MS
+from dotenv import load_dotenv
 
-api_url = "https://cronos-api.nimbusmeteorologia.com.br"
-headers = {
-    "authorization": "2fae64174c18c7e135ca6777e2d0edb01b9f5144002f19d455a7e2d1db6d6c616fa1ff55b2563bf8b2da8abfe5f433b3",
-    "api_key": "be835fa81182e0e994542bb93f7d6875"
-}
+load_dotenv()
 
+API_URL = os.getenv("API_URL")
+headers = {"authorization": os.getenv("AUTHORIZATION"), "api_key": os.getenv("API_KEY")}
 
 def post(complement, data=None, files=None, _json=None, params=None):
     response = requests.post(
-        api_url + complement,
+        API_URL + complement,
         data=data,
         files=files,
         json=_json,
@@ -26,8 +28,8 @@ def post(complement, data=None, files=None, _json=None, params=None):
 
 
 def get(complement, params=None, as_text=False, as_df=False, mode=None):
-    response = requests.get(api_url + complement, headers=headers, params=params)
-    print(f"[GET] {complement} {response}")
+    response = requests.get(API_URL + complement, headers=headers, params=params)
+    # print(f"[GET] {complement} {response}")
 
     try:
         result = response.json()
@@ -57,6 +59,10 @@ def get_models(model_list=None, rename_columns=None):
     return models
 
 
+def get_states():
+    return get("/states", as_df=True)
+
+
 def get_manage_regions(rename_columns=None, mode=None):
     regions = get("/manage/forecast-regions", as_df=True, mode=mode)
     regions = regions[(~regions.inactive) & (~np.isnan(regions.station_id))]
@@ -80,13 +86,13 @@ def download_forecasts(model_id, region_id, rdate, sdate, edate, var_params):
     return get(complement, as_df=True, params=params)
 
 
-def download_forecasts(model_id, region_id, rdate, sdate, edate):
+def download_forecasts(model_id, region_id, rdate):
     complement = f"/forecast-models/{model_id}/download"
     params = {
         "region_id": region_id,
         "run_datetime": rdate,
-        "datetimeStart": sdate,
-        "datetimeEnd": edate,
+        "datetimeStart": rdate,
+        "datetimeEnd": rdate + FIVE_DAYS_IN_MS,
         "precipitation": "abs",
         "frequency": 3600000,
     }
