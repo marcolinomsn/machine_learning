@@ -11,9 +11,13 @@ O projeto busca comparar previsões meteorológicas de diferentes fontes e inves
 
 ## Estrutura do Repositório
 
-* `Machine_Learning_&_Analytics_(40530010055_20250_01).ipynb`: Notebook principal contendo o pipeline completo (pré-processamento, modelagem, tuning e avaliação).  
-* `dataset.csv`: Dados brutos utilizados como input no experimento.
-* `src/`: Funções auxiliares para preparação de dados, construção de modelos e avaliação.  
+* `forecasts.csv`: Dados brutos intermediários, utilizados para produzir o dado bruto completo.
+* `dataset.csv`: Dado bruto completo utilizado como input no experimento.
+* `datetimee.py`: Módulo auxiliar com funções de tratamento de data e hora.
+* `local_api.py`: Módulo auxiliar para comunicação com a api onde o dado encontra-se.
+* `script.py`: Script para download e organização dos dados brutos.
+* `Machine_Learning_&_Analytics_(40530010055_20250_01).ipynb`: Notebook principal contendo o pipeline completo (pré-processamento, modelagem, tuning e avaliação).
+* `README.md`
 
 ## Tecnologias Utilizadas
 
@@ -29,15 +33,14 @@ O projeto busca comparar previsões meteorológicas de diferentes fontes e inves
 1. **Clone o Repositório:**
    ```bash
    git clone https://github.com/seu-usuario/seu-repositorio.git
-   cd seu-repositorio
-
+   cd seu-repositorio```
 
 2. **Crie um ambiente virtual e instale as dependências:**
    ```bash
     python -m venv venv
     source venv/bin/activate   # Linux/Mac
     venv\Scripts\activate      # Windows
-    pip install -r requirements.txt
+    pip install -r requirements.txt```
 
 3. **Execute o Notebook:**
 Abra o arquivo Machine_Learning_&_Analytics.ipynb em um ambiente Jupyter ou Google Colab e rode as células sequencialmente.
